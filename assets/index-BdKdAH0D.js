@@ -17332,6 +17332,8 @@ function jv({
   onRouteChange: n,
   onLogout: r,
   user: i,
+  isAuthenticated: isAuth = false,
+  onShowLogin: onLogin
 }) {
   var P, q;
   const { t: a, i18n: u } = pt(),
@@ -17396,9 +17398,9 @@ function jv({
                           children: [
                             h.jsxs("span", {
                               children: [
-                                (x == null ? void 0 : x.role) === "admin"
+                                isAuth ? (x == null ? void 0 : x.role) === "admin"
                                   ? "Administrator"
-                                  : "User",
+                                  : "User" : "Guest",
                                 " Panel",
                               ],
                             }),
@@ -17450,7 +17452,7 @@ function jv({
                           }`,
                           children: a("stats"),
                         }),
-                        h.jsx("button", {
+                        isAuth && h.jsx("button", {
                           onClick: () => (n == null ? void 0 : n("control")),
                           className: `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                             o === "control"
@@ -17459,7 +17461,7 @@ function jv({
                           }`,
                           children: a("control"),
                         }),
-                        (x == null ? void 0 : x.role) === "admin" &&
+                        isAuth && (x == null ? void 0 : x.role) === "admin" &&
                           h.jsx("button", {
                             onClick: () => (n == null ? void 0 : n("admin")),
                             className: `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
@@ -17542,13 +17544,16 @@ function jv({
                         h.jsxs("div", {
                           className: "text-right",
                           children: [
-                            h.jsx("div", {
+                            isAuth ? h.jsx("div", {
                               className: "text-sm font-medium",
                               children:
                                 (x == null ? void 0 : x.display_name) ||
                                 (x == null ? void 0 : x.email),
+                            }) : h.jsx("div", {
+                              className: "text-sm font-medium",
+                              children: "Guest User",
                             }),
-                            h.jsx("div", {
+                            isAuth && h.jsx("div", {
                               className: "text-xs text-slate-300",
                               children: h.jsx("span", {
                                 children: x == null ? void 0 : x.email,
@@ -17556,11 +17561,16 @@ function jv({
                             }),
                           ],
                         }),
-                        h.jsx("button", {
+                        isAuth ? h.jsx("button", {
                           onClick: _,
                           className:
                             "bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500",
                           children: a("signOut"),
+                        }) : h.jsx("button", {
+                          onClick: onLogin,
+                          className:
+                            "bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500",
+                          children: a("signIn"),
                         }),
                       ],
                     }),
@@ -17641,30 +17651,30 @@ function jv({
                             "w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center",
                           children: h.jsx("span", {
                             className: "text-white font-medium",
-                            children:
+                            children: isAuth ? 
                               ((P = x == null ? void 0 : x.display_name) == null
                                 ? void 0
                                 : P.charAt(0)) ||
                               ((q = x == null ? void 0 : x.email) == null
                                 ? void 0
                                 : q.charAt(0)) ||
-                              "U",
+                              "U" : "G",
                           }),
                         }),
                         h.jsxs("div", {
                           children: [
                             h.jsx("div", {
                               className: "text-white font-medium",
-                              children:
+                              children: isAuth ?
                                 (x == null ? void 0 : x.display_name) ||
-                                (x == null ? void 0 : x.email),
+                                (x == null ? void 0 : x.email) : "Guest User",
                             }),
                             h.jsx("div", {
                               className: "text-slate-300 text-sm",
-                              children:
+                              children: isAuth ?
                                 (x == null ? void 0 : x.role) === "admin"
                                   ? "Administrator"
-                                  : "User",
+                                  : "User" : "Guest",
                             }),
                           ],
                         }),
@@ -17722,7 +17732,7 @@ function jv({
                             h.jsx("span", { children: a("stats") }),
                           ],
                         }),
-                        h.jsxs("button", {
+                        isAuth && h.jsxs("button", {
                           onClick: () => (n == null ? void 0 : n("control")),
                           className: `w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
                             o === "control"
@@ -17745,7 +17755,7 @@ function jv({
                             h.jsx("span", { children: a("control") }),
                           ],
                         }),
-                        (x == null ? void 0 : x.role) === "admin" &&
+                        isAuth && (x == null ? void 0 : x.role) === "admin" &&
                           h.jsxs("button", {
                             onClick: () => (n == null ? void 0 : n("admin")),
                             className: `w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
@@ -17820,7 +17830,7 @@ function jv({
                   }),
                   h.jsx("div", {
                     className: "p-4 border-t border-slate-700",
-                    children: h.jsxs("button", {
+                    children: isAuth ? h.jsxs("button", {
                       onClick: _,
                       className:
                         "w-full flex items-center space-x-3 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors",
@@ -17838,6 +17848,25 @@ function jv({
                           }),
                         }),
                         h.jsx("span", { children: a("signOut") }),
+                      ],
+                    }) : h.jsxs("button", {
+                      onClick: onLogin,
+                      className:
+                        "w-full flex items-center space-x-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors",
+                      children: [
+                        h.jsx("svg", {
+                          className: "w-5 h-5",
+                          fill: "none",
+                          stroke: "currentColor",
+                          viewBox: "0 0 24 24",
+                          children: h.jsx("path", {
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            strokeWidth: 2,
+                            d: "M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1",
+                          }),
+                        }),
+                        h.jsx("span", { children: a("signIn") }),
                       ],
                     }),
                   }),
@@ -18010,6 +18039,7 @@ function Ev({
   onEdit: p,
   cabinetStatus: m = "OFF",
   isAdmin: g = !1,
+  isAuthenticated: isAuth = false,
 }) {
   const { t: v } = pt();
   return r
@@ -18024,7 +18054,21 @@ function Ev({
               top: Math.min(n, window.innerHeight - 300),
             },
             children: [
-              m === "OFF" &&
+              !isAuth &&
+                h.jsxs("div", {
+                  className: "px-4 py-3 text-center text-gray-600 border-b",
+                  children: [
+                    h.jsx("p", {
+                      className: "text-sm font-medium",
+                      children: v("loginRequired"),
+                    }),
+                    h.jsx("p", {
+                      className: "text-xs text-gray-500 mt-1",
+                      children: v("loginToControl"),
+                    }),
+                  ],
+                }),
+              isAuth && m === "OFF" &&
                 h.jsxs("button", {
                   onClick: () => {
                     a == null || a(), i();
@@ -18047,7 +18091,7 @@ function Ev({
                     h.jsx("span", { children: v("turnOn") }),
                   ],
                 }),
-              m === "ON" &&
+              isAuth && m === "ON" &&
                 h.jsxs("button", {
                   onClick: () => {
                     u == null || u(), i();
@@ -18070,7 +18114,7 @@ function Ev({
                     h.jsx("span", { children: v("turnOff") }),
                   ],
                 }),
-              h.jsx("hr", { className: "my-1" }),
+              isAuth && h.jsx("hr", { className: "my-1" }),
               g &&
                 h.jsxs("button", {
                   onClick: () => {
@@ -18187,34 +18231,34 @@ function Pv({
   return o
     ? h.jsx("div", {
         className:
-          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-4",
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-2 sm:p-4 md:p-6",
         children: h.jsxs("div", {
           className:
-            "bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto",
+            "bg-white rounded-lg shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
           children: [
             h.jsx("div", {
               className:
-                "bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-t-lg",
+                "bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-t-lg",
               children: h.jsx("h3", {
-                className: "text-lg font-semibold",
+                className: "text-sm sm:text-base md:text-lg font-semibold",
                 children: d(i ? "editCabinet" : "svgControls.addCabinet"),
               }),
             }),
             h.jsxs("form", {
               onSubmit: x,
-              className: "p-6 space-y-4",
+              className: "p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4",
               children: [
                 h.jsxs("div", {
                   children: [
                     h.jsxs("label", {
-                      className: "block text-sm font-medium text-gray-700 mb-1",
+                      className: "block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                       children: [d("cabinet.id"), " *"],
                     }),
                     h.jsx("input", {
                       type: "text",
                       value: p.id,
                       onChange: (_) => S("id", _.target.value),
-                      className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className: `w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         g.id ? "border-red-500" : "border-gray-300"
                       }`,
                       placeholder: "e.g., C001",
@@ -18229,14 +18273,14 @@ function Pv({
                 h.jsxs("div", {
                   children: [
                     h.jsxs("label", {
-                      className: "block text-sm font-medium text-gray-700 mb-1",
+                      className: "block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                       children: [d("cabinet.name"), " *"],
                     }),
                     h.jsx("input", {
                       type: "text",
                       value: p.name,
                       onChange: (_) => S("name", _.target.value),
-                      className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className: `w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         g.name ? "border-red-500" : "border-gray-300"
                       }`,
                       placeholder: d("cabinet.name"),
@@ -18251,14 +18295,14 @@ function Pv({
                 h.jsxs("div", {
                   children: [
                     h.jsxs("label", {
-                      className: "block text-sm font-medium text-gray-700 mb-1",
+                      className: "block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                       children: [d("cabinet.location"), " *"],
                     }),
                     h.jsx("input", {
                       type: "text",
                       value: p.location,
                       onChange: (_) => S("location", _.target.value),
-                      className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className: `w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         g.location ? "border-red-500" : "border-gray-300"
                       }`,
                       placeholder: d("cabinet.location"),
@@ -18273,7 +18317,7 @@ function Pv({
                 h.jsxs("div", {
                   children: [
                     h.jsxs("label", {
-                      className: "block text-sm font-medium text-gray-700 mb-1",
+                      className: "block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                       children: [d("cabinet.capacity"), " (A) *"],
                     }),
                     h.jsx("input", {
@@ -18281,7 +18325,7 @@ function Pv({
                       value: p.capacity,
                       onChange: (_) =>
                         S("capacity", parseInt(_.target.value) || 0),
-                      className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      className: `w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         g.capacity ? "border-red-500" : "border-gray-300"
                       }`,
                       min: "1",
@@ -18296,13 +18340,13 @@ function Pv({
                   ],
                 }),
                 h.jsxs("div", {
-                  className: "grid grid-cols-2 gap-3",
+                  className: "grid grid-cols-2 gap-2 sm:gap-3",
                   children: [
                     h.jsxs("div", {
                       children: [
                         h.jsx("label", {
                           className:
-                            "block text-sm font-medium text-gray-700 mb-1",
+                            "block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                           children: "X",
                         }),
                         h.jsx("input", {
@@ -18311,7 +18355,7 @@ function Pv({
                           onChange: (_) =>
                             S("svg_x", parseInt(_.target.value) || 0),
                           className:
-                            "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                            "w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                           inputMode: "none",
                           placeholder: "0",
                         }),
@@ -18321,7 +18365,7 @@ function Pv({
                       children: [
                         h.jsx("label", {
                           className:
-                            "block text-sm font-medium text-gray-700 mb-1",
+                            "block text-xs sm:text-sm font-medium text-gray-700 mb-1",
                           children: "Y",
                         }),
                         h.jsx("input", {
@@ -18330,7 +18374,7 @@ function Pv({
                           onChange: (_) =>
                             S("svg_y", parseInt(_.target.value) || 0),
                           className:
-                            "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                            "w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
                           inputMode: "none",
                           placeholder: "0",
                         }),
@@ -18339,19 +18383,19 @@ function Pv({
                   ],
                 }),
                 h.jsxs("div", {
-                  className: "flex space-x-3 pt-4",
+                  className: "flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-3 sm:pt-4",
                   children: [
                     h.jsx("button", {
                       type: "button",
                       onClick: n,
                       className:
-                        "flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md transition-colors duration-200",
+                        "flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md transition-colors duration-200 text-xs sm:text-sm font-medium",
                       children: d("common.cancel"),
                     }),
                     h.jsxs("button", {
                       type: "submit",
                       className:
-                        "flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors duration-200",
+                        "flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors duration-200 text-xs sm:text-sm font-medium",
                       children: [
                         d(i ? "common.refresh" : "svgControls.add"),
                         " ",
@@ -18367,7 +18411,7 @@ function Pv({
       })
     : null;
 }
-function If() {
+function If({ isAuthenticated = false }) {
   var ue, me, de, be;
   const [o, n] = K.useState([]),
     [r, i] = K.useState(null),
@@ -18378,6 +18422,8 @@ function If() {
     [x, S] = K.useState(!1),
     [_, L] = K.useState(1),
     [P, q] = K.useState(!1),
+    [layoutLoading, setLayoutLoading] = K.useState(!0),
+    [svgCache, setSvgCache] = K.useState(null),
     [W, A] = K.useState({ floor1Image: null, floor2Image: null }),
     [R, Q] = K.useState({
       isDragging: !1,
@@ -18395,6 +18441,21 @@ function If() {
     K.useEffect(() => {
       (async () => {
         try {
+          setLayoutLoading(!0);
+          // Check if SVG is cached in localStorage
+          const cachedData = localStorage.getItem('layout_svg_cache');
+          if (cachedData) {
+            const cache = JSON.parse(cachedData);
+            const cacheAge = Date.now() - cache.timestamp;
+            // Use cache if less than 1 hour old
+            if (cacheAge < 3600000 * 1) {
+              setSvgCache(cache.data);
+              A(cache.data);
+              setLayoutLoading(!1);
+              return;
+            }
+          }
+          
           const J = new Image(),
             ne = new Image(),
             Ce = [
@@ -18411,15 +18472,79 @@ function If() {
                   (ne.src = en(2));
               }),
             ];
-          await Promise.all(Ce), A({ floor1Image: J, floor2Image: ne }), q(!0);
+          await Promise.all(Ce);
+          
+          const imageData = { floor1Image: J, floor2Image: ne };
+          A(imageData);
+          setSvgCache(imageData);
+          
+          // Cache the SVG data
+          try {
+            localStorage.setItem('layout_svg_cache', JSON.stringify({
+              data: imageData,
+              timestamp: Date.now()
+            }));
+          } catch (error) {
+            console.warn('Could not cache SVG data:', error);
+          }
+          
+          q(!0);
         } catch {
           q(!0);
+        } finally {
+          setLayoutLoading(!1);
         }
       })();
     }, []),
     K.useEffect(() => {
       oe();
-    }, [B]);
+    }, [B]),
+    // Auto-refresh data every 5 minutes
+    K.useEffect(() => {
+      const refreshInterval = setInterval(() => {
+        oe();
+      }, 5 * 60 * 1000); // 5 minutes
+      
+      return () => clearInterval(refreshInterval);
+    }, []),
+    // Wake lock to prevent screen sleep
+    K.useEffect(() => {
+      let wakeLock = null;
+      
+      const requestWakeLock = async () => {
+        try {
+          if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+          }
+        } catch (err) {
+          // Fallback: use a heartbeat to keep page active
+          const heartbeat = setInterval(() => {
+            // Small activity to prevent sleep
+            document.title = document.title;
+          }, 30000);
+          
+          return () => clearInterval(heartbeat);
+        }
+      };
+      
+      requestWakeLock();
+      
+      // Re-request wake lock if it's released (e.g., tab becomes hidden)
+      const handleVisibilityChange = () => {
+        if (!document.hidden && !wakeLock) {
+          requestWakeLock();
+        }
+      };
+      
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      
+      return () => {
+        if (wakeLock) {
+          wakeLock.release();
+        }
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
+    }, []);
   const oe = async () => {
       try {
         w(!0);
@@ -18722,7 +18847,23 @@ function If() {
                 children: [
                   h.jsx("div", {
                     className: `${x ? "h-screen" : "h-[80vh]"} overflow-hidden`,
-                    children: h.jsxs("svg", {
+                    children: layoutLoading 
+                      ? h.jsx("div", {
+                          className: "flex items-center justify-center h-full bg-gray-50",
+                          children: h.jsxs("div", {
+                            className: "text-center",
+                            children: [
+                              h.jsx("div", {
+                                className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4",
+                              }),
+                              h.jsx("p", {
+                                className: "text-gray-600 text-sm",
+                                children: "Loading layout..."
+                              })
+                            ]
+                          })
+                        })
+                      : h.jsxs("svg", {
                       ref: Y,
                       width: "100%",
                       height: "100%",
@@ -18745,7 +18886,7 @@ function If() {
                           width: "100%",
                           height: "100%",
                           preserveAspectRatio: "xMidYMid meet",
-                          opacity: "0.6",
+                          opacity: "0.4",
                         }),
                         o
                           .filter(($) => $.floor === _)
@@ -18806,7 +18947,7 @@ function If() {
             }),
             !x &&
               h.jsx("div", {
-                className: "px-3 md:px-6 py-2 md:py-4 bg-gray-50 border-t",
+                className: "px-3 md:px-6 py-3 md:py-5 pb-4 md:pb-7 bg-gray-50 border-t",
                 children: h.jsxs("div", {
                   className:
                     "flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0",
@@ -18842,11 +18983,11 @@ function If() {
                         "flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm",
                       children: [
                         h.jsxs("div", {
-                          className: "text-gray-600",
+                          className: "text-gray-600 font-bold",
                           children: ["Total: ", o.length],
                         }),
                         h.jsxs("div", {
-                          className: "text-green-600",
+                          className: "text-green-600 font-bold",
                           children: [
                             "ON: ",
                             o.filter(($) => {
@@ -18860,7 +19001,7 @@ function If() {
                           ],
                         }),
                         h.jsxs("div", {
-                          className: "text-red-600",
+                          className: "text-red-600 font-bold",
                           children: [
                             "OFF: ",
                             o.filter(($) => {
@@ -18943,6 +19084,7 @@ function If() {
             ? void 0
             : me.status) || "OFF",
         isAdmin: pe,
+        isAuthenticated: isAuthenticated,
         onClose: re,
         onToggleOn: () => a.cabinet && D(a.cabinet.id, "ON"),
         onToggleOff: () => a.cabinet && D(a.cabinet.id, "OFF"),
@@ -18965,85 +19107,85 @@ function If() {
         !a.visible &&
         h.jsx("div", {
           className:
-            "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4",
+            "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 md:p-6",
           children: h.jsxs("div", {
             className:
-              "bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto",
+              "bg-white rounded-lg shadow-xl w-95vw md:w-[400px] max-w-xs sm:max-w-[90vw] md:max-w-md max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
             children: [
               h.jsx("div", {
                 className:
-                  "bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 md:px-6 py-3 md:py-4 rounded-t-lg",
+                  "bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-t-lg",
                 children: h.jsx("h3", {
-                  className: "text-base md:text-lg font-semibold",
+                  className: "text-sm sm:text-base md:text-lg font-semibold",
                   children: "Cabinet Details",
                 }),
               }),
               h.jsx("div", {
-                className: "p-4 md:p-6",
+                className: "p-3 sm:p-4 md:p-6",
                 children: h.jsxs("div", {
-                  className: "space-y-2 md:space-y-3",
+                  className: "space-y-2 sm:space-y-3",
                   children: [
                     h.jsxs("div", {
-                      className: "flex justify-between",
+                      className: "flex justify-between items-start sm:items-center",
                       children: [
                         h.jsx("span", {
-                          className: "font-medium text-sm md:text-base",
+                          className: "font-medium text-xs sm:text-sm md:text-base flex-shrink-0",
                           children: "ID:",
                         }),
                         h.jsx("span", {
-                          className: "text-sm md:text-base",
+                          className: "text-xs sm:text-sm md:text-base text-right break-all",
                           children: r.id,
                         }),
                       ],
                     }),
                     h.jsxs("div", {
-                      className: "flex justify-between",
+                      className: "flex justify-between items-start sm:items-center",
                       children: [
                         h.jsx("span", {
-                          className: "font-medium text-sm md:text-base",
+                          className: "font-medium text-xs sm:text-sm md:text-base flex-shrink-0",
                           children: "Name:",
                         }),
                         h.jsx("span", {
-                          className: "text-sm md:text-base",
+                          className: "text-xs sm:text-sm md:text-base text-right break-words",
                           children: r.name,
                         }),
                       ],
                     }),
                     h.jsxs("div", {
-                      className: "flex justify-between",
+                      className: "flex justify-between items-start sm:items-center",
                       children: [
                         h.jsx("span", {
-                          className: "font-medium text-sm md:text-base",
+                          className: "font-medium text-xs sm:text-sm md:text-base flex-shrink-0",
                           children: [M("cabinet.location"), ":"],
                         }),
                         h.jsx("span", {
-                          className: "text-sm md:text-base",
+                          className: "text-xs sm:text-sm md:text-base text-right break-words",
                           children: r.location,
                         }),
                       ],
                     }),
                     h.jsxs("div", {
-                      className: "flex justify-between",
+                      className: "flex justify-between items-start sm:items-center",
                       children: [
                         h.jsxs("span", {
-                          className: "font-medium text-sm md:text-base",
+                          className: "font-medium text-xs sm:text-sm md:text-base flex-shrink-0",
                           children: [M("cabinet.capacity"), ":"],
                         }),
                         h.jsxs("span", {
-                          className: "text-sm md:text-base",
+                          className: "text-xs sm:text-sm md:text-base text-right",
                           children: [r.capacity, " Amps"],
                         }),
                       ],
                     }),
                     h.jsxs("div", {
-                      className: "flex justify-between",
+                      className: "flex justify-between items-start sm:items-center",
                       children: [
                         h.jsxs("span", {
-                          className: "font-medium text-sm md:text-base",
+                          className: "font-medium text-xs sm:text-sm md:text-base flex-shrink-0",
                           children: [M("cabinet.status"), ":"],
                         }),
                         h.jsx("span", {
-                          className: `px-2 py-1 rounded text-xs md:text-sm font-medium ${
+                          className: `px-2 py-1 rounded text-xs sm:text-sm font-medium ${
                             ((de = r.current_status) == null
                               ? void 0
                               : de.status) === "ON"
@@ -19058,14 +19200,14 @@ function If() {
                       ],
                     }),
                     h.jsxs("div", {
-                      className: "flex justify-between",
+                      className: "flex justify-between items-start sm:items-center",
                       children: [
                         h.jsx("span", {
-                          className: "font-medium text-sm md:text-base",
+                          className: "font-medium text-xs sm:text-sm md:text-base flex-shrink-0",
                           children: "Position:",
                         }),
                         h.jsxs("span", {
-                          className: "text-sm md:text-base",
+                          className: "text-xs sm:text-sm md:text-base text-right",
                           children: ["(", r.svg_x, ", ", r.svg_y, ")"],
                         }),
                       ],
@@ -19074,11 +19216,11 @@ function If() {
                 }),
               }),
               h.jsx("div", {
-                className: "px-4 md:px-6 py-3 md:py-4 bg-gray-50 rounded-b-lg",
+                className: "px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 bg-gray-50 rounded-b-lg",
                 children: h.jsx("button", {
                   onClick: re,
                   className:
-                    "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm md:text-base",
+                    "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 text-xs sm:text-sm md:text-base font-medium",
                   children: "Close",
                 }),
               }),
@@ -19092,6 +19234,8 @@ function Ov() {
   const [o, n] = K.useState([]),
     [r, i] = K.useState(""),
     [a, u] = K.useState("ALL"),
+    [sortBy, setSortBy] = K.useState("name"), // "name", "id", "location", "capacity", "status"
+    [sortOrder, setSortOrder] = K.useState("asc"), // "asc", "desc"
     d = Rr((g) => g.user),
     { t: p } = pt();
   K.useEffect(() => {
@@ -19106,6 +19250,29 @@ function Ov() {
     }
     g();
   }, [d]);
+  
+  // Natural sort function for alphanumeric strings (A1-9 before A1-10)
+  const naturalSort = (a, b) => {
+    return a.localeCompare(b, undefined, {
+      numeric: true,
+      sensitivity: 'base'
+    });
+  };
+  
+  // Auto-refresh statistics data every 5 minutes
+  K.useEffect(() => {
+    const statsInterval = setInterval(async () => {
+      if (d.role === "admin") {
+        const v = await Vl();
+        n(v || []);
+      } else {
+        const v = await gh();
+        n(v || []);
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+    
+    return () => clearInterval(statsInterval);
+  }, [d.role]);
   const m = o.filter((g) => {
     var v;
     return (
@@ -19115,6 +19282,35 @@ function Ov() {
         g.name.toLowerCase().includes(r.toLowerCase()) ||
         g.location.toLowerCase().includes(r.toLowerCase()))
     );
+  }).sort((g1, g2) => {
+    let value1, value2;
+    
+    switch (sortBy) {
+      case "name":
+        value1 = g1.name;
+        value2 = g2.name;
+        return sortOrder === "asc" ? naturalSort(value1, value2) : naturalSort(value2, value1);
+      case "id":
+        value1 = g1.id;
+        value2 = g2.id;
+        return sortOrder === "asc" ? naturalSort(value1, value2) : naturalSort(value2, value1);
+      case "location":
+        value1 = g1.location;
+        value2 = g2.location;
+        return sortOrder === "asc" ? naturalSort(value1, value2) : naturalSort(value2, value1);
+      case "capacity":
+        value1 = g1.capacity;
+        value2 = g2.capacity;
+        return sortOrder === "asc" ? value1 - value2 : value2 - value1;
+      case "status":
+        value1 = g1.current_status?.status || "OFF";
+        value2 = g2.current_status?.status || "OFF";
+        return sortOrder === "asc" ? naturalSort(value1, value2) : naturalSort(value2, value1);
+      default:
+        value1 = g1.name;
+        value2 = g2.name;
+        return sortOrder === "asc" ? naturalSort(value1, value2) : naturalSort(value2, value1);
+    }
   });
   return h.jsx("div", {
     className: "flex-1 bg-slate-50",
@@ -19129,23 +19325,23 @@ function Ov() {
               "px-2 py-2 border-b bg-gradient-to-r from-red-50 via-green-50 to-blue-100",
             children: h.jsxs("div", {
               className:
-                "flex md:flex-row gap-2 items-center justify-center text-center",
+                "flex flex-col lg:flex-row gap-2 items-center justify-center text-center",
               children: [
+                // Search input
                 h.jsx("input", {
                   value: r,
                   onChange: (g) => i(g.target.value),
                   placeholder: p("statsPage.searchPlaceholder"),
                   className:
-                    "px-3 py-2 text-sm md:text-base border-1 border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white transition w-full md:w-auto text-center",
-                  style: { flexBasis: "80%", flexGrow: 1, minWidth: 0 },
+                    "px-3 py-2 text-sm md:text-base border-1 border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white transition w-full lg:flex-1 text-center",
                 }),
+                // Status filter
                 h.jsxs("select", {
                   value: a,
                   onChange: (g) => u(g.target.value),
                   className:
-                    "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full md:w-auto text-center",
+                    "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full lg:flex-1 text-center",
                   title: p("statsPage.filterByStatus"),
-                  style: { flexBasis: "20%", minWidth: 90 },
                   children: [
                     h.jsx("option", {
                       value: "ALL",
@@ -19158,6 +19354,42 @@ function Ov() {
                     }),
                   ],
                 }),
+                // Sort select
+                h.jsxs("select", {
+                  value: sortBy,
+                  onChange: (g) => setSortBy(g.target.value),
+                  className: "px-2 py-1 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 w-full lg:flex-1",
+                  children: [
+                    h.jsx("option", { value: "name", children: p("statsPage.sortByName") }),
+                    h.jsx("option", { value: "id", children: p("statsPage.sortById") }),
+                    h.jsx("option", { value: "location", children: p("statsPage.sortByLocation") }),
+                    h.jsx("option", { value: "capacity", children: p("statsPage.sortByCapacity") }),
+                    h.jsx("option", { value: "status", children: p("statsPage.sortByStatus") })
+                  ]
+                }),
+                // Sort order button
+                h.jsx("button", {
+                  onClick: () => setSortOrder(sortOrder === "asc" ? "desc" : "asc"),
+                  className: `px-3 py-1 text-sm border border-gray-300 rounded-lg bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-1 w-full lg:flex-1 justify-center ${sortOrder === "desc" ? "text-blue-600" : "text-gray-600"}`,
+                  children: [
+                    h.jsx("span", { 
+                      className: "hidden lg:inline",
+                      children: sortOrder === "asc" ? p("statsPage.ascending") : p("statsPage.descending") 
+                    }),
+                    h.jsx("svg", {
+                      className: `w-4 h-4 transition-transform ${sortOrder === "desc" ? "rotate-180" : ""}`,
+                      fill: "none",
+                      stroke: "currentColor",
+                      viewBox: "0 0 24 24",
+                      children: h.jsx("path", {
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeWidth: "2",
+                        d: "M7 11l5-5m0 0l5 5m-5-5v12"
+                      })
+                    })
+                  ]
+                })
               ],
             }),
           }),
@@ -20326,17 +20558,17 @@ function Iv({ isOpen: o, onClose: n }) {
     o
       ? h.jsx("div", {
           className:
-            "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4",
+            "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 md:p-6",
           children: h.jsxs("div", {
             className:
-              "bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto",
+              "bg-white rounded-lg shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
             children: [
               h.jsxs("div", {
                 className:
-                  "sticky top-0 bg-white border-b px-4 py-3 flex items-center justify-between",
+                  "sticky top-0 bg-white border-b px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between",
                 children: [
                   h.jsx("h2", {
-                    className: "text-lg font-semibold text-slate-800",
+                    className: "text-base sm:text-lg font-semibold text-slate-800",
                     children: r("layout.settings"),
                   }),
                   h.jsx("button", {
@@ -21365,12 +21597,12 @@ function $v() {
                 R &&
                   h.jsx("div", {
                     className:
-                      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4",
+                      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 md:p-6",
                     children: h.jsxs("div", {
-                      className: "bg-white rounded-lg p-6 w-full max-w-md",
+                      className: "bg-white rounded-lg p-3 sm:p-4 md:p-6 w-full max-w-xs sm:max-w-sm md:max-w-md mx-2 sm:mx-4",
                       children: [
                         h.jsx("h3", {
-                          className: "text-lg font-medium text-slate-800 mb-4",
+                          className: "text-sm sm:text-base md:text-lg font-medium text-slate-800 mb-3 sm:mb-4",
                           children: "Đặt lại mật khẩu người dùng",
                         }),
                         h.jsxs("div", {
@@ -21597,6 +21829,7 @@ function Vv() {
     [r, i] = K.useState(!1),
     [a, u] = K.useState(!0),
     [d, p] = K.useState(!1),
+    [showLoginForm, setShowLoginForm] = K.useState(!1),
     { user: m, setUser: g, clearUser: v } = Rr(),
     { t: w } = pt(),
     x = K.useRef(Date.now()),
@@ -21704,12 +21937,14 @@ function Vv() {
         Ss({ user: Y, lastActivity: Date.now() }), g(Y), i(!0), L();
         const pe = Xi(Y.role);
         n(pe);
+        setShowLoginForm(!1);
       } catch (Y) {
         console.error("Error getting user profile:", Y);
         const pe = B;
         Ss({ user: pe, lastActivity: Date.now() }), g(pe), i(!0), L();
         const oe = Xi(pe.role);
         n(oe);
+        setShowLoginForm(!1);
       } finally {
         u(!1);
       }
@@ -21734,9 +21969,10 @@ function Vv() {
           i(!1),
           p(!1),
           n("layout"),
-          u(!1);
+          u(!1),
+          setShowLoginForm(!1);
       } catch (B) {
-        console.error("Logout error:", B), v(), i(!1), p(!1), n("layout");
+        console.error("Logout error:", B), v(), i(!1), p(!1), n("layout"), setShowLoginForm(!1);
       }
     },
     A = K.useCallback(() => {
@@ -21763,29 +21999,38 @@ function Vv() {
         ],
       }),
     });
-  if (!r)
+  
+  if (showLoginForm)
     return h.jsx("div", {
       className: "min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100",
       children: h.jsx(dv, { onAuthSuccess: q }),
     });
+  
   const Q = () => {
     switch (o) {
       case "layout":
-        return h.jsx(If, {});
+        return h.jsx(If, { isAuthenticated: r });
       case "stats":
         return h.jsx(Ov, {});
       case "control":
-        return h.jsx(Tv, {});
+        return r ? h.jsx(Tv, {}) : h.jsx(If, { isAuthenticated: r });
       case "admin":
-        return h.jsx($v, {});
+        return r ? h.jsx($v, {}) : h.jsx(If, { isAuthenticated: r });
       default:
-        return h.jsx(If, {});
+        return h.jsx(If, { isAuthenticated: r });
     }
   };
   return h.jsxs("div", {
     className: "min-h-screen bg-gray-100 flex flex-col",
     children: [
-      h.jsx(jv, { currentRoute: o, onRouteChange: R, onLogout: W, user: m }),
+      h.jsx(jv, { 
+        currentRoute: o, 
+        onRouteChange: R, 
+        onLogout: W, 
+        user: m,
+        isAuthenticated: r,
+        onShowLogin: () => setShowLoginForm(!0)
+      }),
       h.jsx("main", { className: "flex-1", children: Q() }),
       h.jsx(Cv, { show: d, onExtend: A, onLogout: W }),
       !1,
@@ -24357,6 +24602,8 @@ const kh = "electrical_cabinet_language",
         "common.refresh": "Refresh",
         turnOn: "Turn On",
         turnOff: "Turn Off",
+        loginRequired: "Login Required",
+        loginToControl: "Please login to control cabinets",
         editCabinet: "Edit Cabinet",
         deleteCabinet: "Delete Cabinet",
         floor1: "Floor 1",
@@ -24400,6 +24647,14 @@ const kh = "electrical_cabinet_language",
           subtitle: "Real-time monitoring and analytics",
           searchPlaceholder: "Search by name or location...",
           filterByStatus: "Filter by status",
+          sortBy: "Sort by:",
+          sortByName: "Name (ABC)",
+          sortById: "ID (123)",
+          sortByLocation: "Location",
+          sortByCapacity: "Capacity",
+          sortByStatus: "Status",
+          ascending: "↑ Ascending",
+          descending: "↓ Descending",
           totalCabinets: "Total Cabinets",
           uptime: "Uptime Rate",
           cabinetInfo: "Cabinet Information",
@@ -24550,6 +24805,8 @@ const kh = "electrical_cabinet_language",
         floor3: "Tầng 3",
         turnOn: "Bật",
         turnOff: "Tắt",
+        loginRequired: "Cần đăng nhập",
+        loginToControl: "Vui lòng đăng nhập để điều khiển tủ điện",
         editCabinet: "Chỉnh sửa tủ điện",
         deleteCabinet: "Xóa tủ điện",
         stats: "Thống kê",
@@ -24590,6 +24847,14 @@ const kh = "electrical_cabinet_language",
           subtitle: "Giám sát và phân tích thời gian thực",
           searchPlaceholder: "Tìm theo tên hoặc vị trí...",
           filterByStatus: "Lọc theo trạng thái",
+          sortBy: "Sắp xếp theo:",
+          sortByName: "Tên (ABC)",
+          sortById: "ID (123)",
+          sortByLocation: "Vị trí",
+          sortByCapacity: "Công suất",
+          sortByStatus: "Trạng thái",
+          ascending: "↑ Tăng dần",
+          descending: "↓ Giảm dần",
           totalCabinets: "Tổng số tủ",
           uptime: "Tỷ lệ hoạt động",
           cabinetInfo: "Thông tin tủ điện",
@@ -24740,6 +25005,8 @@ const kh = "electrical_cabinet_language",
         floor3: "3층",
         turnOn: "켜기",
         turnOff: "끄기",
+        loginRequired: "로그인 필요",
+        loginToControl: "캐비닛을 제어하려면 로그인하세요",
         editCabinet: "캐비닛 편집",
         deleteCabinet: "캐비닛 삭제",
         stats: "통계",
@@ -24779,6 +25046,14 @@ const kh = "electrical_cabinet_language",
           subtitle: "실시간 모니터링 및 분석",
           searchPlaceholder: "이름 또는 위치로 검색...",
           filterByStatus: "상태별 필터",
+          sortBy: "정렬 기준:",
+          sortByName: "이름 (ABC)",
+          sortById: "ID (123)",
+          sortByLocation: "위치",
+          sortByCapacity: "용량",
+          sortByStatus: "상태",
+          ascending: "↑ 오름차순",
+          descending: "↓ 내림차순",
           totalCabinets: "총 캐비닛",
           uptime: "가동률",
           cabinetInfo: "캐비닛 정보",
