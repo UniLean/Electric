@@ -19337,14 +19337,14 @@ function Ov() {
                 }),
                 // Filters container - remaining 50% divided equally
                 h.jsxs("div", {
-                  className: "w-full md:w-1/2 flex flex-col md:flex-row gap-2",
+                  className: "w-full md:w-1/2 flex flex-row md:flex-row gap-2",
                   children: [
-                    // Status filter - 1/3 of remaining 50%
+                    // Status filter
                     h.jsxs("select", {
                       value: a,
                       onChange: (g) => u(g.target.value),
                       className:
-                        "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full md:flex-1 text-center",
+                        "px-2 py-2 text-xs md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition flex-1 md:flex-1 text-center",
                       title: p("statsPage.filterByStatus"),
                   children: [
                     h.jsx("option", {
@@ -19358,11 +19358,11 @@ function Ov() {
                     }),
                   ],
                     }),
-                    // Sort select - 1/3 of remaining 50%
+                    // Sort select
                     h.jsxs("select", {
                       value: sortBy,
                       onChange: (g) => setSortBy(g.target.value),
-                      className: "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full md:flex-1 text-center",
+                      className: "px-2 py-2 text-xs md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition flex-1 md:flex-1 text-center",
                       children: [
                         h.jsx("option", { value: "name", children: p("statsPage.sortByName") }),
                         h.jsx("option", { value: "id", children: p("statsPage.sortById") }),
@@ -19371,10 +19371,10 @@ function Ov() {
                         h.jsx("option", { value: "status", children: p("statsPage.sortByStatus") })
                       ]
                     }),
-                    // Sort order button - 1/3 of remaining 50%
+                    // Sort order button - 15% width on mobile
                     h.jsx("button", {
                       onClick: () => setSortOrder(sortOrder === "asc" ? "desc" : "asc"),
-                      className: `px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-400 transition flex items-center gap-1 w-full md:flex-1 justify-center ${sortOrder === "desc" ? "text-blue-600" : "text-gray-600"}`,
+                      className: `px-1 py-2 text-xs md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-400 transition flex items-center gap-1 w-[15%] md:flex-1 justify-center ${sortOrder === "desc" ? "text-blue-600" : "text-gray-600"}`,
                       children: [
                         h.jsx("span", { 
                           className: "hidden md:inline",
