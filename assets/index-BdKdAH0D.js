@@ -18234,7 +18234,7 @@ function Pv({
           "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60 p-2 sm:p-4 md:p-6",
         children: h.jsxs("div", {
           className:
-            "bg-white rounded-lg shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
+            "bg-white rounded-lg shadow-xl w-full sm:w-[360px] md:w-[380px] lg:w-[400px] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
           children: [
             h.jsx("div", {
               className:
@@ -19110,7 +19110,7 @@ function If({ isAuthenticated = false }) {
             "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 md:p-6",
           children: h.jsxs("div", {
             className:
-              "bg-white rounded-lg shadow-xl w-95vw md:w-[400px] max-w-xs sm:max-w-[90vw] md:max-w-md max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
+              "bg-white rounded-lg shadow-xl w-full sm:w-[420px] md:w-[450px] lg:w-[480px] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
             children: [
               h.jsx("div", {
                 className:
@@ -19325,23 +19325,27 @@ function Ov() {
               "px-2 py-2 border-b bg-gradient-to-r from-red-50 via-green-50 to-blue-100",
             children: h.jsxs("div", {
               className:
-                "flex flex-col lg:flex-row gap-2 items-center justify-center text-center",
+                "flex flex-col md:flex-row gap-2 items-center justify-center text-center",
               children: [
-                // Search input
+                // Search input - 50% on desktop
                 h.jsx("input", {
                   value: r,
                   onChange: (g) => i(g.target.value),
                   placeholder: p("statsPage.searchPlaceholder"),
                   className:
-                    "px-3 py-2 text-sm md:text-base border-1 border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white transition w-full lg:flex-1 text-center",
+                    "px-3 py-2 text-sm md:text-base border-1 border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white transition w-full md:w-1/2 text-center",
                 }),
-                // Status filter
-                h.jsxs("select", {
-                  value: a,
-                  onChange: (g) => u(g.target.value),
-                  className:
-                    "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full lg:flex-1 text-center",
-                  title: p("statsPage.filterByStatus"),
+                // Filters container - remaining 50% divided equally
+                h.jsxs("div", {
+                  className: "w-full md:w-1/2 flex flex-col md:flex-row gap-2",
+                  children: [
+                    // Status filter - 1/3 of remaining 50%
+                    h.jsxs("select", {
+                      value: a,
+                      onChange: (g) => u(g.target.value),
+                      className:
+                        "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full md:flex-1 text-center",
+                      title: p("statsPage.filterByStatus"),
                   children: [
                     h.jsx("option", {
                       value: "ALL",
@@ -19353,40 +19357,42 @@ function Ov() {
                       children: p("common.off"),
                     }),
                   ],
-                }),
-                // Sort select
-                h.jsxs("select", {
-                  value: sortBy,
-                  onChange: (g) => setSortBy(g.target.value),
-                  className: "px-2 py-1 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 w-full lg:flex-1",
-                  children: [
-                    h.jsx("option", { value: "name", children: p("statsPage.sortByName") }),
-                    h.jsx("option", { value: "id", children: p("statsPage.sortById") }),
-                    h.jsx("option", { value: "location", children: p("statsPage.sortByLocation") }),
-                    h.jsx("option", { value: "capacity", children: p("statsPage.sortByCapacity") }),
-                    h.jsx("option", { value: "status", children: p("statsPage.sortByStatus") })
-                  ]
-                }),
-                // Sort order button
-                h.jsx("button", {
-                  onClick: () => setSortOrder(sortOrder === "asc" ? "desc" : "asc"),
-                  className: `px-3 py-1 text-sm border border-gray-300 rounded-lg bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-1 w-full lg:flex-1 justify-center ${sortOrder === "desc" ? "text-blue-600" : "text-gray-600"}`,
-                  children: [
-                    h.jsx("span", { 
-                      className: "hidden lg:inline",
-                      children: sortOrder === "asc" ? p("statsPage.ascending") : p("statsPage.descending") 
                     }),
-                    h.jsx("svg", {
-                      className: `w-4 h-4 transition-transform ${sortOrder === "desc" ? "rotate-180" : ""}`,
-                      fill: "none",
-                      stroke: "currentColor",
-                      viewBox: "0 0 24 24",
-                      children: h.jsx("path", {
-                        strokeLinecap: "round",
-                        strokeLinejoin: "round",
-                        strokeWidth: "2",
-                        d: "M7 11l5-5m0 0l5 5m-5-5v12"
-                      })
+                    // Sort select - 1/3 of remaining 50%
+                    h.jsxs("select", {
+                      value: sortBy,
+                      onChange: (g) => setSortBy(g.target.value),
+                      className: "px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 transition w-full md:flex-1 text-center",
+                      children: [
+                        h.jsx("option", { value: "name", children: p("statsPage.sortByName") }),
+                        h.jsx("option", { value: "id", children: p("statsPage.sortById") }),
+                        h.jsx("option", { value: "location", children: p("statsPage.sortByLocation") }),
+                        h.jsx("option", { value: "capacity", children: p("statsPage.sortByCapacity") }),
+                        h.jsx("option", { value: "status", children: p("statsPage.sortByStatus") })
+                      ]
+                    }),
+                    // Sort order button - 1/3 of remaining 50%
+                    h.jsx("button", {
+                      onClick: () => setSortOrder(sortOrder === "asc" ? "desc" : "asc"),
+                      className: `px-3 py-2 text-sm md:text-base border-1 border-amber-300 rounded-lg bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-400 transition flex items-center gap-1 w-full md:flex-1 justify-center ${sortOrder === "desc" ? "text-blue-600" : "text-gray-600"}`,
+                      children: [
+                        h.jsx("span", { 
+                          className: "hidden md:inline",
+                          children: sortOrder === "asc" ? p("statsPage.ascending") : p("statsPage.descending") 
+                        }),
+                        h.jsx("svg", {
+                          className: `w-4 h-4 transition-transform ${sortOrder === "desc" ? "rotate-180" : ""}`,
+                          fill: "none",
+                          stroke: "currentColor",
+                          viewBox: "0 0 24 24",
+                          children: h.jsx("path", {
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            strokeWidth: "2",
+                            d: "M7 11l5-5m0 0l5 5m-5-5v12"
+                          })
+                        })
+                      ]
                     })
                   ]
                 })
@@ -19396,7 +19402,7 @@ function Ov() {
           h.jsx("div", {
             className: "px-2 py-2 border-b bg-white",
             children: h.jsxs("div", {
-              className: "flex flex-row gap-1 md:gap-2 w-full",
+              className: "flex flex-row gap-1 md:gap-2 w-full max-w-full",
               children: [
                 h.jsxs("div", {
                   className:
@@ -19495,7 +19501,7 @@ function Ov() {
             className: "overflow-x-auto",
             style: { maxHeight: 500, minHeight: 180, overflowY: "auto" },
             children: h.jsxs("table", {
-              className: "w-[95%] md:w-full mx-auto text-xs md:text-sm",
+              className: "w-[95%] md:w-full p-[10px] mx-auto text-xs md:text-sm",
               children: [
                 h.jsx("thead", {
                   className: "bg-blue-500 sticky top-0 z-10",
@@ -20561,7 +20567,7 @@ function Iv({ isOpen: o, onClose: n }) {
             "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 md:p-6",
           children: h.jsxs("div", {
             className:
-              "bg-white rounded-lg shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
+              "bg-white rounded-lg shadow-xl w-full sm:w-[480px] md:w-[500px] lg:w-[520px] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto mx-2 sm:mx-4",
             children: [
               h.jsxs("div", {
                 className:
